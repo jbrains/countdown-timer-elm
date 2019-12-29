@@ -34,6 +34,12 @@ update msg { timer } =
 view : Model -> Html Msg
 view { timer } =
     div []
+        [ viewTimer timer ]
+
+
+viewTimer : Timer -> Html Msg
+viewTimer timer =
+    div []
         [ button [ onClick Tick ] [ text "tick" ]
         , div [] [ TypedTime.toString TypedTime.Seconds (Timer.timeRemainingInSeconds timer |> toFloat |> TypedTime.seconds) |> text ]
         ]
