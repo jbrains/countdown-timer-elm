@@ -4,6 +4,7 @@ import Expect
 import Fuzz exposing (..)
 import Test exposing (..)
 import Timer exposing (..)
+import TypedTime
 
 
 allTests : Test
@@ -12,7 +13,7 @@ allTests =
         [ describe "tick causes the timer to tick down one second"
             [ fuzz (intRange 1 10000) "boring happy path" <|
                 \startTimeInSecondsAsInt ->
-                    activeTimerSetTo startTimeInSecondsAsInt
+                    activeTimerSetTo (TypedTime.seconds (toFloat startTimeInSecondsAsInt))
                         |> tick
                         |> timeRemainingInSeconds
                         |> Expect.equal (startTimeInSecondsAsInt - 1)

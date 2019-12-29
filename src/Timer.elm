@@ -14,9 +14,9 @@ type Timer
     | ExpiredTimer
 
 
-activeTimerSetTo : Int -> Timer
-activeTimerSetTo timeRemainingInSecondsAsNumber =
-    ActiveTimer { timeRemaining = seconds (toFloat timeRemainingInSecondsAsNumber) }
+activeTimerSetTo : TypedTime -> Timer
+activeTimerSetTo timeRemaining =
+    ActiveTimer { timeRemaining = timeRemaining }
 
 
 expiredTimer : Timer
