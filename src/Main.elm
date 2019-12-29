@@ -13,7 +13,7 @@ main =
 
 
 type alias Model =
-    { timer : Timer, setTimeText : String, setTime : Result String TypedTime }
+    { timer : Timer, setTimeText : String, setTime : ParsedTime }
 
 
 init : Model
@@ -27,12 +27,16 @@ type Msg
     | SetRemainingTime
 
 
-parseTime : String -> Result String TypedTime
+type alias ParsedTime =
+    Result String TypedTime
+
+
+parseTime : String -> ParsedTime
 parseTime text =
     TypedTime.fromString TypedTime.Seconds text |> Result.fromMaybe text
 
 
-formatTypedTimeResult : Result String TypedTime -> String
+formatTypedTimeResult : ParsedTime -> String
 formatTypedTimeResult result =
     case result of
         Ok typedTime ->
@@ -66,8 +70,17 @@ view { timer, setTimeText, setTime } =
         [ viewTimer timer setTimeText setTime ]
 
 
-viewTimer : Timer -> String -> Result String TypedTime -> Html Msg
+viewTimer : Timer -> String -> ParsedTime -> Html Msg
 viewTimer timer setTimeText setTime =
+    div []
+        [ button [ onClick Tick ] [ text "tick" ]
+        , viewSetTimerControls setTimeText setTime
+        , div [] [ TypedTime.toString TypedTime.Seconds (Timer.timeRemainingInSeconds timer |> toFloat |> TypedTime.seconds) |> text ]
+        ]
+
+
+viewSetTimerControls : String -> ParsedTime -> Html Msg
+viewSetTimerControls setTimeText setTime =
     let
         markValid =
             Html.Attributes.style "border-color" ""
@@ -84,9 +97,7 @@ viewTimer timer setTimeText setTime =
                     markInvalid
     in
     div []
-        [ button [ onClick Tick ] [ text "tick" ]
-        , input [ markInputFieldValidForResult setTime, placeholder "set time", value setTimeText, onInput UpdateSetTimeText ] []
+        [ input [ markInputFieldValidForResult setTime, placeholder "set time", value setTimeText, onInput UpdateSetTimeText ] []
         , label [] [ text (formatTypedTimeResult setTime) ]
         , button [ onClick SetRemainingTime ] [ text "set" ]
-        , div [] [ TypedTime.toString TypedTime.Seconds (Timer.timeRemainingInSeconds timer |> toFloat |> TypedTime.seconds) |> text ]
         ]
