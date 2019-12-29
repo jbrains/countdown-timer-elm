@@ -3,7 +3,7 @@ module TimerEngineTests exposing (allTests)
 import Expect
 import Fuzz exposing (..)
 import Test exposing (..)
-import Timer exposing (activeTimerSetTo, tick, timeRemainingInSeconds)
+import Timer exposing (..)
 
 
 allTests : Test
@@ -16,5 +16,11 @@ allTests =
                         |> tick
                         |> timeRemainingInSeconds
                         |> Expect.equal (startTimeInSeconds - 1)
+            , test "expired timer doesn't tick" <|
+                \() ->
+                    expiredTimer
+                        |> tick
+                        |> timeRemainingInSeconds
+                        |> Expect.equal 0
             ]
         ]
