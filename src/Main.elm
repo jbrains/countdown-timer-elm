@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, input, text)
+import Html exposing (Html, button, div, input, label, text)
 import Html.Attributes exposing (placeholder, value)
 import Html.Events exposing (onClick, onInput)
 import Timer exposing (Timer)
@@ -27,9 +27,19 @@ type Msg
     | SetRemainingTime
 
 
-parseTime : String -> Maybe TypedTime
-parseTime =
-    TypedTime.fromString TypedTime.Seconds
+parseTime : String -> Result String TypedTime
+parseTime text =
+    TypedTime.fromString TypedTime.Seconds text |> Result.fromMaybe text
+
+
+formatTypedTimeResult : Result String TypedTime -> String
+formatTypedTimeResult result =
+    case result of
+        Ok typedTime ->
+            TypedTime.toString TypedTime.Seconds typedTime
+
+        Err text ->
+            text
 
 
 update : Msg -> Model -> Model
@@ -39,7 +49,7 @@ update msg model =
             { model | timer = Timer.tick model.timer }
 
         UpdateSetTimeText newSetTimeText ->
-            { model | setTimeText = newSetTimeText, setTime = parseTime newSetTimeText |> Result.fromMaybe newSetTimeText }
+            { model | setTimeText = newSetTimeText, setTime = parseTime newSetTimeText }
 
         SetRemainingTime ->
             case model.setTime of
@@ -76,6 +86,7 @@ viewTimer timer setTimeText setTime =
     div []
         [ button [ onClick Tick ] [ text "tick" ]
         , input [ markInputFieldValidForResult setTime, placeholder "set time", value setTimeText, onInput UpdateSetTimeText ] []
+        , label [] [ text (formatTypedTimeResult setTime) ]
         , button [ onClick SetRemainingTime ] [ text "set" ]
         , div [] [ TypedTime.toString TypedTime.Seconds (Timer.timeRemainingInSeconds timer |> toFloat |> TypedTime.seconds) |> text ]
         ]
