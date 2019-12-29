@@ -5,7 +5,7 @@ import Html exposing (Html, button, div, input, text)
 import Html.Attributes exposing (placeholder, value)
 import Html.Events exposing (onClick, onInput)
 import Timer exposing (Timer)
-import TypedTime exposing (minutes)
+import TypedTime exposing (TypedTime, minutes)
 
 
 main =
@@ -27,6 +27,11 @@ type Msg
     | SetRemainingTime Timer String
 
 
+parseTime : String -> Maybe TypedTime
+parseTime =
+    TypedTime.fromString TypedTime.Seconds
+
+
 update : Msg -> Model -> Model
 update msg model =
     case msg of
@@ -39,7 +44,7 @@ update msg model =
         SetRemainingTime timer newTimeAsText ->
             let
                 maybeNewTime =
-                    TypedTime.fromString TypedTime.Seconds newTimeAsText
+                    parseTime newTimeAsText
             in
             case maybeNewTime of
                 Just newTime ->
