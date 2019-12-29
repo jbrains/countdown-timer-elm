@@ -83,6 +83,7 @@ viewTimer timer setTimeText setTime =
 viewSetTimerControls : String -> ParsedTime -> Html Msg
 viewSetTimerControls setTimeText setTime =
     let
+        -- REFACTOR Replace CSS style with CSS class
         markValid _ =
             Html.Attributes.style "border-color" ""
 
