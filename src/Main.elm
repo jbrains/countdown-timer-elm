@@ -4,6 +4,7 @@ import Browser
 import Html exposing (Html, button, div, input, label, text)
 import Html.Attributes exposing (placeholder, value)
 import Html.Events exposing (onClick, onInput)
+import Result.Extra
 import Timer exposing (Timer)
 import TypedTime exposing (TypedTime, minutes)
 
@@ -82,22 +83,14 @@ viewTimer timer setTimeText setTime =
 viewSetTimerControls : String -> ParsedTime -> Html Msg
 viewSetTimerControls setTimeText setTime =
     let
-        markValid =
+        markValid _ =
             Html.Attributes.style "border-color" ""
 
-        markInvalid =
+        markInvalid _ =
             Html.Attributes.style "border-color" "red"
-
-        markInputFieldValidForResult result =
-            case result of
-                Ok _ ->
-                    markValid
-
-                Err _ ->
-                    markInvalid
     in
     div []
-        [ input [ markInputFieldValidForResult setTime, placeholder "set time", value setTimeText, onInput UpdateSetTimeText ] []
+        [ input [ Result.Extra.unpack markInvalid markValid setTime, placeholder "set time", value setTimeText, onInput UpdateSetTimeText ] []
         , label [] [ text (formatTypedTimeResult setTime) ]
         , button [ onClick SetRemainingTime ] [ text "set" ]
         ]

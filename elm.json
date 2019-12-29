@@ -10,6 +10,7 @@
             "elm/core": "1.0.4",
             "elm/html": "1.0.0",
             "elm-community/list-extra": "8.2.2",
+            "elm-community/result-extra": "2.3.0",
             "elm-explorations/test": "1.2.2",
             "jxxcarlson/elm-typed-time": "1.2.0",
             "lynn/elm-arithmetic": "3.0.0"
