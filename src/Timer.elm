@@ -6,14 +6,17 @@ module Timer exposing
     , timeRemainingInSeconds
     )
 
+import TypedTime exposing (TypedTime, seconds)
+
 
 type Timer
-    = ActiveTimer { timeRemaining : Int }
+    = ActiveTimer { timeRemaining : TypedTime }
     | ExpiredTimer
 
 
-activeTimerSetTo timeRemaining =
-    ActiveTimer { timeRemaining = timeRemaining }
+activeTimerSetTo : Int -> Timer
+activeTimerSetTo timeRemainingInSecondsAsNumber =
+    ActiveTimer { timeRemaining = seconds (toFloat timeRemainingInSecondsAsNumber) }
 
 
 expiredTimer : Timer
@@ -27,10 +30,10 @@ tick timer =
         ActiveTimer properties ->
             let
                 newTimeRemaining =
-                    properties.timeRemaining - 1
+                    TypedTime.sub properties.timeRemaining (seconds 1)
             in
-            if newTimeRemaining > 0 then
-                ActiveTimer { properties | timeRemaining = properties.timeRemaining - 1 }
+            if TypedTime.gt newTimeRemaining (seconds 0) then
+                ActiveTimer { properties | timeRemaining = newTimeRemaining }
 
             else
                 ExpiredTimer
@@ -43,7 +46,7 @@ timeRemainingInSeconds : Timer -> Int
 timeRemainingInSeconds timer =
     case timer of
         ActiveTimer { timeRemaining } ->
-            timeRemaining
+            TypedTime.toSeconds timeRemaining |> floor
 
         ExpiredTimer ->
             0
