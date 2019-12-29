@@ -88,9 +88,12 @@ viewSetTimerControls setTimeText setTime =
 
         markInvalid _ =
             Html.Attributes.style "border-color" "red"
+
+        highlightErrorsIn =
+            Result.Extra.unpack markInvalid markValid
     in
     div []
-        [ input [ Result.Extra.unpack markInvalid markValid setTime, placeholder "set time", value setTimeText, onInput UpdateSetTimeText ] []
+        [ input [ highlightErrorsIn setTime, placeholder "set time", value setTimeText, onInput UpdateSetTimeText ] []
         , label [] [ text (formatTypedTimeResult setTime) ]
         , button [ onClick SetRemainingTime ] [ text "set" ]
         ]
