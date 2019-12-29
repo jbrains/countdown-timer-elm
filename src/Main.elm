@@ -13,18 +13,18 @@ main =
 
 
 type alias Model =
-    { timer : Timer, setTimeText : String }
+    { timer : Timer, setTimeText : String, setTime : Result String TypedTime }
 
 
 init : Model
 init =
-    { timer = Timer.activeTimerSetTo (minutes 10), setTimeText = "" }
+    { timer = Timer.activeTimerSetTo (minutes 10), setTimeText = "", setTime = Err "" }
 
 
 type Msg
-    = Tick Timer
+    = Tick
     | UpdateSetTimeText String
-    | SetRemainingTime Timer String
+    | SetRemainingTime
 
 
 parseTime : String -> Maybe TypedTime
@@ -35,36 +35,47 @@ parseTime =
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        Tick timer ->
-            { model | timer = Timer.tick timer }
+        Tick ->
+            { model | timer = Timer.tick model.timer }
 
-        UpdateSetTimeText text ->
-            { model | setTimeText = text }
+        UpdateSetTimeText newSetTimeText ->
+            { model | setTimeText = newSetTimeText, setTime = parseTime newSetTimeText |> Result.fromMaybe newSetTimeText }
 
-        SetRemainingTime timer newTimeAsText ->
-            let
-                maybeNewTime =
-                    parseTime newTimeAsText
-            in
-            case maybeNewTime of
-                Just newTime ->
+        SetRemainingTime ->
+            case model.setTime of
+                Ok newTime ->
                     { model | timer = Timer.activeTimerSetTo newTime }
 
-                Nothing ->
+                Err unparsableText ->
                     model
 
 
 view : Model -> Html Msg
-view { timer, setTimeText } =
+view { timer, setTimeText, setTime } =
     div []
-        [ viewTimer timer setTimeText ]
+        [ viewTimer timer setTimeText setTime ]
 
 
-viewTimer : Timer -> String -> Html Msg
-viewTimer timer setTimeText =
+viewTimer : Timer -> String -> Result String TypedTime -> Html Msg
+viewTimer timer setTimeText setTime =
+    let
+        markValid =
+            Html.Attributes.style "border-color" ""
+
+        markInvalid =
+            Html.Attributes.style "border-color" "red"
+
+        markInputFieldValidForResult result =
+            case result of
+                Ok _ ->
+                    markValid
+
+                Err _ ->
+                    markInvalid
+    in
     div []
-        [ button [ onClick (Tick timer) ] [ text "tick" ]
-        , input [ placeholder "Set time to", value setTimeText, onInput UpdateSetTimeText ] []
-        , button [ onClick (SetRemainingTime timer setTimeText) ] [ text "set" ]
+        [ button [ onClick Tick ] [ text "tick" ]
+        , input [ markInputFieldValidForResult setTime, placeholder "set time", value setTimeText, onInput UpdateSetTimeText ] []
+        , button [ onClick SetRemainingTime ] [ text "set" ]
         , div [] [ TypedTime.toString TypedTime.Seconds (Timer.timeRemainingInSeconds timer |> toFloat |> TypedTime.seconds) |> text ]
         ]
