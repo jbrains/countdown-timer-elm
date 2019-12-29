@@ -21,13 +21,13 @@ init =
 
 
 type Msg
-    = Tick
+    = Tick Timer
 
 
 update : Msg -> Model -> Model
-update msg { timer } =
+update msg _ =
     case msg of
-        Tick ->
+        Tick timer ->
             { timer = Timer.tick timer }
 
 
@@ -40,6 +40,6 @@ view { timer } =
 viewTimer : Timer -> Html Msg
 viewTimer timer =
     div []
-        [ button [ onClick Tick ] [ text "tick" ]
+        [ button [ onClick (Tick timer) ] [ text "tick" ]
         , div [] [ TypedTime.toString TypedTime.Seconds (Timer.timeRemainingInSeconds timer |> toFloat |> TypedTime.seconds) |> text ]
         ]
