@@ -7,13 +7,18 @@ import Timer exposing (..)
 import TypedTime
 
 
+newActiveTimerSetInSecondsAsInt : Int -> Timer
+newActiveTimerSetInSecondsAsInt =
+    toFloat >> TypedTime.seconds >> activeTimerSetTo
+
+
 allTests : Test
 allTests =
     describe "When running the timer"
         [ describe "tick causes the timer to tick down one second"
             [ fuzz (intRange 1 10000) "boring happy path" <|
                 \startTimeInSecondsAsInt ->
-                    activeTimerSetTo (TypedTime.seconds (toFloat startTimeInSecondsAsInt))
+                    newActiveTimerSetInSecondsAsInt startTimeInSecondsAsInt
                         |> tick
                         |> timeRemainingInSeconds
                         |> Expect.equal (startTimeInSecondsAsInt - 1)
