@@ -14,12 +14,12 @@ main =
 
 
 type alias Model =
-    { timer : Timer, setTimeText : String, setTime : ParsedTime }
+    { timer : Timer, timeToSetAsText : String }
 
 
 init : Model
 init =
-    { timer = Timer.activeTimerSetTo (minutes 10), setTimeText = "", setTime = Err "" }
+    { timer = Timer.activeTimerSetTo (minutes 10), timeToSetAsText = "" }
 
 
 type Msg
@@ -47,6 +47,11 @@ formatTypedTimeResult result =
             text
 
 
+timeToSet : Model -> ParsedTime
+timeToSet model =
+    model.timeToSetAsText |> parseTime
+
+
 update : Msg -> Model -> Model
 update msg model =
     case msg of
@@ -54,10 +59,10 @@ update msg model =
             { model | timer = Timer.tick model.timer }
 
         UpdateSetTimeText newSetTimeText ->
-            { model | setTimeText = newSetTimeText, setTime = parseTime newSetTimeText }
+            { model | timeToSetAsText = newSetTimeText }
 
         SetRemainingTime ->
-            case model.setTime of
+            case timeToSet model of
                 Ok newTime ->
                     { model | timer = Timer.activeTimerSetTo newTime }
 
@@ -66,22 +71,26 @@ update msg model =
 
 
 view : Model -> Html Msg
-view { timer, setTimeText, setTime } =
+view { timer, timeToSetAsText } =
+    let
+        setTime =
+            parseTime timeToSetAsText
+    in
     div []
-        [ viewTimer timer setTimeText setTime ]
+        [ viewTimer timer timeToSetAsText setTime ]
 
 
 viewTimer : Timer -> String -> ParsedTime -> Html Msg
-viewTimer timer setTimeText setTime =
+viewTimer timer timeToSetAsText setTime =
     div []
         [ button [ onClick Tick ] [ text "tick" ]
-        , viewSetTimerControls setTimeText setTime
+        , viewSetTimerControls timeToSetAsText setTime
         , div [] [ TypedTime.toString TypedTime.Seconds (Timer.timeRemainingInSeconds timer |> toFloat |> TypedTime.seconds) |> text ]
         ]
 
 
 viewSetTimerControls : String -> ParsedTime -> Html Msg
-viewSetTimerControls setTimeText setTime =
+viewSetTimerControls timeToSetAsText setTime =
     let
         -- REFACTOR Replace CSS style with CSS class
         markValid _ =
@@ -94,7 +103,7 @@ viewSetTimerControls setTimeText setTime =
             Result.Extra.unpack markInvalid markValid
     in
     div []
-        [ input [ highlightErrorsIn setTime, placeholder "set time", value setTimeText, onInput UpdateSetTimeText ] []
+        [ input [ highlightErrorsIn setTime, placeholder "set time", value timeToSetAsText, onInput UpdateSetTimeText ] []
         , label [] [ text (formatTypedTimeResult setTime) ]
         , button [ onClick SetRemainingTime ] [ text "set" ]
         ]
