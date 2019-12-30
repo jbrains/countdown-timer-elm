@@ -1,5 +1,5 @@
 module Timer exposing
-    ( Timer
+    ( Timer(..)
     , activeTimerSetTo
     , expiredTimer
     , tick

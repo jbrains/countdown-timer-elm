@@ -5,7 +5,8 @@ import Html exposing (Html, button, div, input, label, text)
 import Html.Attributes exposing (placeholder, value)
 import Html.Events exposing (onClick, onInput)
 import Result.Extra
-import Timer exposing (Timer)
+import Time
+import Timer exposing (Timer(..))
 import TypedTime exposing (TypedTime, minutes)
 
 
@@ -14,14 +15,14 @@ main =
 
 
 type alias Model =
-    { timer : Timer, timeToSetAsText : String }
+    { timer : Timer, timeToSetAsText : String, running : Bool }
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
     let
         newModel =
-            { timer = Timer.activeTimerSetTo (minutes 10), timeToSetAsText = "" }
+            { timer = Timer.activeTimerSetTo (minutes 10), timeToSetAsText = "", running = False }
     in
     ( newModel, Cmd.none )
 
@@ -60,32 +61,73 @@ timeToSet model =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
+    case msg of
+        Tick ->
+            tickTimer model
+
+        UpdateSetTimeText newSetTimeText ->
+            updateSetTimeRemainingText model newSetTimeText
+
+        SetRemainingTime ->
+            setTimeRemaining model
+
+        Start ->
+            startTimer model
+
+        Stop ->
+            stopTimer model
+
+
+tickTimer : Model -> ( Model, Cmd Msg )
+tickTimer model =
+    ( { model | timer = Timer.tick model.timer }, Cmd.none )
+
+
+updateSetTimeRemainingText model newSetTimeText =
+    ( { model | timeToSetAsText = newSetTimeText }, Cmd.none )
+
+
+setTimeRemaining model =
     let
         newModel =
-            case msg of
-                Tick ->
-                    { model | timer = Timer.tick model.timer }
+            case timeToSet model of
+                Ok newTime ->
+                    { model | timer = Timer.activeTimerSetTo newTime }
 
-                UpdateSetTimeText newSetTimeText ->
-                    { model | timeToSetAsText = newSetTimeText }
-
-                SetRemainingTime ->
-                    case timeToSet model of
-                        Ok newTime ->
-                            { model | timer = Timer.activeTimerSetTo newTime }
-
-                        Err unparsableText ->
-                            model
-
-                _ ->
+                Err unparsableText ->
                     model
     in
     ( newModel, Cmd.none )
 
 
+setTimerRunning model on =
+    let
+        newModel =
+            case model.timer of
+                ActiveTimer _ ->
+                    { model | running = on }
+
+                ExpiredTimer ->
+                    model
+    in
+    ( newModel, Cmd.none )
+
+
+startTimer model =
+    setTimerRunning model True
+
+
+stopTimer model =
+    setTimerRunning model False
+
+
 subscriptions : Model -> Sub Msg
-subscriptions _ =
-    Sub.none
+subscriptions model =
+    if model.running then
+        Time.every 1000 (always Tick)
+
+    else
+        Sub.none
 
 
 view : Model -> Html Msg
