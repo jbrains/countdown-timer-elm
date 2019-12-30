@@ -28,6 +28,8 @@ init _ =
 
 type Msg
     = Tick
+    | Start
+    | Stop
     | UpdateSetTimeText String
     | SetRemainingTime
 
@@ -74,6 +76,9 @@ update msg model =
 
                         Err unparsableText ->
                             model
+
+                _ ->
+                    model
     in
     ( newModel, Cmd.none )
 
@@ -96,7 +101,11 @@ view { timer, timeToSetAsText } =
 viewTimer : Timer -> String -> ParsedTime -> Html Msg
 viewTimer timer timeToSetAsText setTime =
     div []
-        [ button [ onClick Tick ] [ text "tick" ]
+        [ div [] [ button [ onClick Tick ] [ text "tick" ] ]
+        , div []
+            [ button [ onClick Stop ] [ text "stop" ]
+            , button [ onClick Start ] [ text "start" ]
+            ]
         , viewSetTimerControls timeToSetAsText setTime
         , div [] [ TypedTime.toString TypedTime.Seconds (Timer.timeRemainingInSeconds timer |> toFloat |> TypedTime.seconds) |> text ]
         ]
