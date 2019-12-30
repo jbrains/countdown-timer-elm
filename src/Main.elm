@@ -10,16 +10,20 @@ import TypedTime exposing (TypedTime, minutes)
 
 
 main =
-    Browser.sandbox { init = init, update = update, view = view }
+    Browser.element { init = init, update = update, view = view, subscriptions = subscriptions }
 
 
 type alias Model =
     { timer : Timer, timeToSetAsText : String }
 
 
-init : Model
-init =
-    { timer = Timer.activeTimerSetTo (minutes 10), timeToSetAsText = "" }
+init : () -> ( Model, Cmd Msg )
+init _ =
+    let
+        newModel =
+            { timer = Timer.activeTimerSetTo (minutes 10), timeToSetAsText = "" }
+    in
+    ( newModel, Cmd.none )
 
 
 type Msg
@@ -52,22 +56,31 @@ timeToSet model =
     model.timeToSetAsText |> parseTime
 
 
-update : Msg -> Model -> Model
+update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    case msg of
-        Tick ->
-            { model | timer = Timer.tick model.timer }
+    let
+        newModel =
+            case msg of
+                Tick ->
+                    { model | timer = Timer.tick model.timer }
 
-        UpdateSetTimeText newSetTimeText ->
-            { model | timeToSetAsText = newSetTimeText }
+                UpdateSetTimeText newSetTimeText ->
+                    { model | timeToSetAsText = newSetTimeText }
 
-        SetRemainingTime ->
-            case timeToSet model of
-                Ok newTime ->
-                    { model | timer = Timer.activeTimerSetTo newTime }
+                SetRemainingTime ->
+                    case timeToSet model of
+                        Ok newTime ->
+                            { model | timer = Timer.activeTimerSetTo newTime }
 
-                Err unparsableText ->
-                    model
+                        Err unparsableText ->
+                            model
+    in
+    ( newModel, Cmd.none )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    Sub.none
 
 
 view : Model -> Html Msg
