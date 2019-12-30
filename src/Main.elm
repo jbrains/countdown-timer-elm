@@ -121,9 +121,13 @@ stopTimer model =
     setTimerRunning model False
 
 
+isTimerRunning model =
+    model.running
+
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    if model.running then
+    if isTimerRunning model then
         Time.every 1000 (always Tick)
 
     else
