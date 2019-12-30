@@ -5,6 +5,7 @@ import Html exposing (Html, button, div, input, label, text)
 import Html.Attributes exposing (placeholder, value)
 import Html.Events exposing (onClick, onInput)
 import Result.Extra
+import Task
 import Time
 import Timer exposing (Timer(..))
 import TypedTime exposing (TypedTime, minutes)
@@ -87,17 +88,16 @@ updateSetTimeRemainingText model newSetTimeText =
     ( { model | timeToSetAsText = newSetTimeText }, Cmd.none )
 
 
+setTimeRemaining : Model -> ( Model, Cmd Msg )
 setTimeRemaining model =
-    let
-        newModel =
-            case timeToSet model of
-                Ok newTime ->
-                    { model | timer = Timer.activeTimerSetTo newTime, running = False }
+    case timeToSet model of
+        Ok newTime ->
+            ( { model | timer = Timer.activeTimerSetTo newTime }
+            , Task.perform (always Stop) (Task.succeed 0)
+            )
 
-                Err unparsableText ->
-                    model
-    in
-    ( newModel, Cmd.none )
+        Err unparsableText ->
+            ( model, Cmd.none )
 
 
 setTimerRunning model on =
