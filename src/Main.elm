@@ -15,16 +15,21 @@ main =
     Browser.element { init = init, update = update, view = view, subscriptions = subscriptions }
 
 
+type TimerState
+    = Running
+    | Frozen
+
+
 type alias Model =
     -- REFACTOR Move 'running' onto the Timer object in order to keep View Model and Domain Model separate.
-    { timer : Timer, timeToSetAsText : String, running : Bool }
+    { timer : Timer, timeToSetAsText : String, running : Bool, timerState : TimerState }
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
     let
         newModel =
-            { timer = Timer.activeTimerSetTo (minutes 10), timeToSetAsText = "", running = False }
+            { timer = Timer.activeTimerSetTo (minutes 10), timeToSetAsText = "", running = False, timerState = Frozen }
     in
     ( newModel, Cmd.none )
 
@@ -103,13 +108,23 @@ setTimeRemaining model =
 
 setTimerRunning model on =
     let
+        newTimerState =
+            if on then
+                Running
+
+            else
+                Frozen
+
         newModel =
             case model.timer of
                 ActiveTimer _ ->
-                    { model | running = on }
+                    { model
+                        | running = on
+                        , timerState = newTimerState
+                    }
 
                 ExpiredTimer ->
-                    model
+                    { model | running = False, timerState = Frozen }
     in
     ( newModel, Cmd.none )
 
