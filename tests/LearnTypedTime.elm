@@ -52,10 +52,10 @@ failingTestsDueToParsingIssue =
                         incorrectlyButReasonablyTryToFormatTimeUnderOneMinuteInSeconds n =
                             "0:"
                                 ++ (if n >= 10 then
-                                        Debug.toString n
+                                        String.fromInt n
 
                                     else
-                                        "0" ++ Debug.toString n
+                                        "0" ++ String.fromInt n
                                    )
 
                         expectedResultInMaybeSeconds =
