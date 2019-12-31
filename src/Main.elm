@@ -137,17 +137,14 @@ stopTimer model =
     setTimerRunning model False
 
 
-isTimerRunning model =
-    model.running
-
-
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    if isTimerRunning model then
-        Time.every 1000 (always Tick)
+    case model.timerState of
+        Running ->
+            Time.every 1000 (always Tick)
 
-    else
-        Sub.none
+        Frozen ->
+            Sub.none
 
 
 view : Model -> Html Msg
