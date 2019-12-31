@@ -17,7 +17,7 @@ main =
 
 type TimerState
     = Running
-    | Frozen -- REFACTOR ExpiredTimer implies Frozen, so combine these somehow?
+    | Frozen -- REFACTOR Aha! ExpiredTimer and Frozen both happen to imply something in common!
 
 
 type alias Model =
