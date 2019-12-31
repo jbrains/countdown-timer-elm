@@ -21,15 +21,15 @@ type TimerState
 
 
 type alias Model =
-    -- REFACTOR Move 'running' onto the Timer object in order to keep View Model and Domain Model separate.
-    { timer : Timer, timeToSetAsText : String, running : Bool, timerState : TimerState }
+    -- REFACTOR Move 'timer state' onto the Timer object in order to keep View Model and Domain Model separate.
+    { timer : Timer, timerState : TimerState, timeToSetAsText : String }
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
     let
         newModel =
-            { timer = Timer.activeTimerSetTo (minutes 10), timeToSetAsText = "", running = False, timerState = Frozen }
+            { timer = Timer.activeTimerSetTo (minutes 10), timeToSetAsText = "", timerState = Frozen }
     in
     ( newModel, Cmd.none )
 
@@ -118,13 +118,11 @@ setTimerRunning model on =
         newModel =
             case model.timer of
                 ActiveTimer _ ->
-                    { model
-                        | running = on
-                        , timerState = newTimerState
-                    }
+                    { model | timerState = newTimerState }
 
                 ExpiredTimer ->
-                    { model | running = False, timerState = Frozen }
+                    -- SMELL Expired implies Frozen. I'd like to make this more explicit!
+                    { model | timerState = Frozen }
     in
     ( newModel, Cmd.none )
 
