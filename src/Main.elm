@@ -16,6 +16,7 @@ main =
 
 
 type alias Model =
+    -- REFACTOR Move 'running' onto the Timer object in order to keep View Model and Domain Model separate.
     { timer : Timer, timeToSetAsText : String, running : Bool }
 
 
