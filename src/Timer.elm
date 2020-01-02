@@ -10,6 +10,7 @@ import TypedTime exposing (TypedTime, seconds)
 
 type Timer
     = ActiveTimer TypedTime
+    | PausedTimer TypedTime
     | ExpiredTimer
 
 
@@ -18,29 +19,40 @@ expiredTimer =
     ExpiredTimer
 
 
+tickTimer : (TypedTime -> Timer) -> TypedTime -> Timer
+tickTimer timerConstructor timeRemaining =
+    let
+        newTimeRemaining =
+            TypedTime.sub timeRemaining (seconds 1)
+    in
+    if TypedTime.gt newTimeRemaining (seconds 0) then
+        timerConstructor newTimeRemaining
+
+    else
+        ExpiredTimer
+
+
 tick : Timer -> Timer
 tick timer =
     case timer of
         ActiveTimer timeRemaining ->
-            let
-                newTimeRemaining =
-                    TypedTime.sub timeRemaining (seconds 1)
-            in
-            if TypedTime.gt newTimeRemaining (seconds 0) then
-                ActiveTimer newTimeRemaining
+            tickTimer ActiveTimer timeRemaining
 
-            else
-                ExpiredTimer
+        PausedTimer timeRemaining ->
+            tickTimer PausedTimer timeRemaining
 
-        ExpiredTimer ->
+        _ ->
             timer
 
 
 timeRemainingInSeconds : Timer -> Int
 timeRemainingInSeconds timer =
     case timer of
+        PausedTimer timeRemaining ->
+            TypedTime.toSeconds timeRemaining |> floor
+
         ActiveTimer timeRemaining ->
             TypedTime.toSeconds timeRemaining |> floor
 
-        ExpiredTimer ->
+        _ ->
             0

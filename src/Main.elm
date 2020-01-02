@@ -15,21 +15,20 @@ main =
     Browser.element { init = init, update = update, view = view, subscriptions = subscriptions }
 
 
-type TimerState
-    = Running
-    | Frozen -- REFACTOR Aha! ExpiredTimer and Frozen both happen to imply something in common!
-
-
 type alias Model =
-    -- REFACTOR Move 'timer state' onto the Timer object in order to keep View Model and Domain Model separate.
-    { timer : Timer, timerState : TimerState, timeToSetAsText : String }
+    -- REFACTOR Better isolate Domain Model from View Model
+    { timer : Timer, timeToSetAsText : String }
 
 
 init : () -> ( Model, Cmd Msg )
 init _ =
     let
+        initTimer =
+            -- REFACTOR Move this into the Domain Model
+            PausedTimer (minutes 10)
+
         newModel =
-            { timer = ActiveTimer (minutes 10), timeToSetAsText = "", timerState = Frozen }
+            { timer = initTimer, timeToSetAsText = "" }
     in
     ( newModel, Cmd.none )
 
@@ -106,42 +105,39 @@ setTimeRemaining model =
             ( model, Cmd.none )
 
 
-setTimerRunning model on =
+startTimer model =
     let
-        newTimerState =
-            if on then
-                Running
-
-            else
-                Frozen
-
         newModel =
             case model.timer of
-                ActiveTimer _ ->
-                    { model | timerState = newTimerState }
+                PausedTimer timeRemaining ->
+                    { model | timer = ActiveTimer timeRemaining }
 
-                ExpiredTimer ->
-                    -- SMELL Expired implies Frozen. I'd like to make this more explicit!
-                    { model | timerState = Frozen }
+                _ ->
+                    model
     in
     ( newModel, Cmd.none )
 
 
-startTimer model =
-    setTimerRunning model True
-
-
 stopTimer model =
-    setTimerRunning model False
+    let
+        newModel =
+            case model.timer of
+                ActiveTimer timeRemaining ->
+                    { model | timer = PausedTimer timeRemaining }
+
+                _ ->
+                    model
+    in
+    ( newModel, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    case model.timerState of
-        Running ->
+    case model.timer of
+        ActiveTimer _ ->
             Time.every 1000 (always Tick)
 
-        Frozen ->
+        _ ->
             Sub.none
 
 
