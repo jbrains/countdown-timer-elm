@@ -1,6 +1,5 @@
 module Timer exposing
     ( Timer(..)
-    , activeTimerSetTo
     , expiredTimer
     , tick
     , timeRemainingInSeconds
@@ -12,11 +11,6 @@ import TypedTime exposing (TypedTime, seconds)
 type Timer
     = ActiveTimer TypedTime
     | ExpiredTimer
-
-
-activeTimerSetTo : TypedTime -> Timer
-activeTimerSetTo timeRemaining =
-    ActiveTimer timeRemaining
 
 
 expiredTimer : Timer

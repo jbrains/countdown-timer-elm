@@ -4,12 +4,17 @@ import Expect
 import Fuzz exposing (..)
 import Test exposing (..)
 import Timer exposing (..)
-import TypedTime
+import TypedTime exposing (TypedTime(..))
+
+
+secondsFromInt : Int -> TypedTime
+secondsFromInt =
+    toFloat >> TypedTime.seconds
 
 
 newActiveTimerSetInSecondsAsInt : Int -> Timer
 newActiveTimerSetInSecondsAsInt =
-    toFloat >> TypedTime.seconds >> activeTimerSetTo
+    secondsFromInt >> ActiveTimer
 
 
 allTests : Test

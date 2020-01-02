@@ -29,7 +29,7 @@ init : () -> ( Model, Cmd Msg )
 init _ =
     let
         newModel =
-            { timer = Timer.activeTimerSetTo (minutes 10), timeToSetAsText = "", timerState = Frozen }
+            { timer = ActiveTimer (minutes 10), timeToSetAsText = "", timerState = Frozen }
     in
     ( newModel, Cmd.none )
 
@@ -98,7 +98,7 @@ setTimeRemaining : Model -> ( Model, Cmd Msg )
 setTimeRemaining model =
     case timeToSet model of
         Ok newTime ->
-            ( { model | timer = Timer.activeTimerSetTo newTime }
+            ( { model | timer = ActiveTimer newTime }
             , Task.perform (always Stop) (Task.succeed 0)
             )
 
