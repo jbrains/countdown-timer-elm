@@ -78,10 +78,10 @@ update msg model =
             setTimeRemaining model
 
         Start ->
-            startTimer model
+            ( setTimerRunning model True, Cmd.none )
 
         Stop ->
-            stopTimer model
+            ( setTimerRunning model False, Cmd.none )
 
 
 tickTimer : Model -> ( Model, Cmd Msg )
@@ -115,22 +115,6 @@ setTimerRunning model running =
 
         _ ->
             model
-
-
-startTimer model =
-    let
-        newModel =
-            setTimerRunning model True
-    in
-    ( newModel, Cmd.none )
-
-
-stopTimer model =
-    let
-        newModel =
-            setTimerRunning model False
-    in
-    ( newModel, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
