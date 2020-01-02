@@ -105,15 +105,22 @@ setTimeRemaining model =
             ( model, Cmd.none )
 
 
+setTimerRunning model running =
+    case ( model.timer, running ) of
+        ( PausedTimer timeRemaining, True ) ->
+            { model | timer = ActiveTimer timeRemaining }
+
+        ( ActiveTimer timeRemaining, False ) ->
+            { model | timer = PausedTimer timeRemaining }
+
+        _ ->
+            model
+
+
 startTimer model =
     let
         newModel =
-            case model.timer of
-                PausedTimer timeRemaining ->
-                    { model | timer = ActiveTimer timeRemaining }
-
-                _ ->
-                    model
+            setTimerRunning model True
     in
     ( newModel, Cmd.none )
 
@@ -121,12 +128,7 @@ startTimer model =
 stopTimer model =
     let
         newModel =
-            case model.timer of
-                ActiveTimer timeRemaining ->
-                    { model | timer = PausedTimer timeRemaining }
-
-                _ ->
-                    model
+            setTimerRunning model False
     in
     ( newModel, Cmd.none )
 
