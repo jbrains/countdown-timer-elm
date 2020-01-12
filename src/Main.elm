@@ -78,10 +78,10 @@ update msg model =
             setTimeRemaining model
 
         Start ->
-            ( setTimerRunning model True, Cmd.none )
+            ( setTimerRunning True model, Cmd.none )
 
         Stop ->
-            ( setTimerRunning model False, Cmd.none )
+            ( setTimerRunning False model, Cmd.none )
 
 
 tickTimer : Model -> ( Model, Cmd Msg )
@@ -105,7 +105,8 @@ setTimeRemaining model =
             ( model, Cmd.none )
 
 
-setTimerRunning model running =
+setTimerRunning : Bool -> Model -> Model
+setTimerRunning running model =
     case ( model.timer, running ) of
         ( PausedTimer timeRemaining, True ) ->
             { model | timer = ActiveTimer timeRemaining }
