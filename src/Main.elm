@@ -97,9 +97,7 @@ setTimeRemaining : Model -> ( Model, Cmd Msg )
 setTimeRemaining model =
     case timeToSet model of
         Ok newTime ->
-            ( { model | timer = ActiveTimer newTime }
-            , Task.perform (always Stop) (Task.succeed 0)
-            )
+            ( { model | timer = PausedTimer newTime }, Cmd.none )
 
         Err unparsableText ->
             ( model, Cmd.none )
