@@ -97,6 +97,7 @@ setTimeRemaining : Model -> ( Model, Cmd Msg )
 setTimeRemaining model =
     case timeToSet model of
         Ok newTime ->
+            -- SMELL Duplicates knowledge in setTimerRunning
             ( { model | timer = PausedTimer newTime }, Cmd.none )
 
         Err unparsableText ->
