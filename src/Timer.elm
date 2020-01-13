@@ -72,7 +72,7 @@ setRunning running timer =
             ActiveTimer timeRemaining
 
         ( ActiveTimer timeRemaining, False ) ->
-            PausedTimer timeRemaining
+            stopAtTime timeRemaining timer
 
         _ ->
             timer
