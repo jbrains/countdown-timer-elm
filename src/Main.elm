@@ -99,10 +99,15 @@ setTimeRemaining model =
     case timeToSet model of
         Ok newTime ->
             -- SMELL Duplicates knowledge in setTimerRunning
-            { model | timer = PausedTimer newTime }
+            { model | timer = model.timer |> stopAtTime newTime }
 
         Err unparsableText ->
             model
+
+
+stopAtTime : TypedTime -> Timer -> Timer
+stopAtTime time _ =
+    PausedTimer time
 
 
 setTimerRunning : Bool -> Model -> Model
