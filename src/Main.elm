@@ -107,15 +107,7 @@ setTimeRemaining model =
 
 setTimerRunning : Bool -> Model -> Model
 setTimerRunning running model =
-    case ( model.timer, running ) of
-        ( PausedTimer timeRemaining, True ) ->
-            { model | timer = ActiveTimer timeRemaining }
-
-        ( ActiveTimer timeRemaining, False ) ->
-            { model | timer = PausedTimer timeRemaining }
-
-        _ ->
-            model
+    { model | timer = model.timer |> Timer.setRunning running }
 
 
 subscriptions : Model -> Sub Msg

@@ -1,6 +1,7 @@
 module Timer exposing
     ( Timer(..)
     , expiredTimer
+    , setRunning
     , tick
     , timeRemainingInSeconds
     )
@@ -56,3 +57,16 @@ timeRemainingInSeconds timer =
 
         _ ->
             0
+
+
+setRunning : Bool -> Timer -> Timer
+setRunning running timer =
+    case ( timer, running ) of
+        ( PausedTimer timeRemaining, True ) ->
+            ActiveTimer timeRemaining
+
+        ( ActiveTimer timeRemaining, False ) ->
+            PausedTimer timeRemaining
+
+        _ ->
+            timer
