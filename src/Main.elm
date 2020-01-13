@@ -69,13 +69,13 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Tick ->
-            tickTimer model
+            ( tickTimer model, Cmd.none )
 
         UpdateSetTimeText newSetTimeText ->
-            updateSetTimeRemainingText model newSetTimeText
+            ( model |> updateSetTimeRemainingText newSetTimeText, Cmd.none )
 
         SetRemainingTime ->
-            setTimeRemaining model
+            ( setTimeRemaining model, Cmd.none )
 
         Start ->
             ( model |> setTimerRunning True, Cmd.none )
@@ -84,24 +84,25 @@ update msg model =
             ( model |> setTimerRunning False, Cmd.none )
 
 
-tickTimer : Model -> ( Model, Cmd Msg )
+tickTimer : Model -> Model
 tickTimer model =
-    ( { model | timer = Timer.tick model.timer }, Cmd.none )
+    { model | timer = Timer.tick model.timer }
 
 
-updateSetTimeRemainingText model newSetTimeText =
-    ( { model | timeToSetAsText = newSetTimeText }, Cmd.none )
+updateSetTimeRemainingText : String -> Model -> Model
+updateSetTimeRemainingText newSetTimeText model =
+    { model | timeToSetAsText = newSetTimeText }
 
 
-setTimeRemaining : Model -> ( Model, Cmd Msg )
+setTimeRemaining : Model -> Model
 setTimeRemaining model =
     case timeToSet model of
         Ok newTime ->
             -- SMELL Duplicates knowledge in setTimerRunning
-            ( { model | timer = PausedTimer newTime }, Cmd.none )
+            { model | timer = PausedTimer newTime }
 
         Err unparsableText ->
-            ( model, Cmd.none )
+            model
 
 
 setTimerRunning : Bool -> Model -> Model
