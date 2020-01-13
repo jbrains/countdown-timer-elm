@@ -61,8 +61,8 @@ timeRemainingInSeconds timer =
 
 
 stoppedAtTime : TypedTime -> Timer
-stoppedAtTime time =
-    PausedTimer time
+stoppedAtTime =
+    PausedTimer
 
 
 setRunning : Bool -> Timer -> Timer
