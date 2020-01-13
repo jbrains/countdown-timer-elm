@@ -24,8 +24,7 @@ init : () -> ( Model, Cmd Msg )
 init _ =
     let
         initTimer =
-            -- REFACTOR Move this into the Domain Model
-            PausedTimer (minutes 10)
+            10 |> minutes |> Timer.stoppedAtTime
 
         newModel =
             { timer = initTimer, timeToSetAsText = "" }
