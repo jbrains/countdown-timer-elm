@@ -2,7 +2,7 @@ module Timer exposing
     ( Timer(..)
     , expiredTimer
     , setRunning
-    , stopAtTime
+    , stoppedAtTime
     , tick
     , timeRemainingInSeconds
     )
@@ -60,8 +60,8 @@ timeRemainingInSeconds timer =
             0
 
 
-stopAtTime : TypedTime -> Timer -> Timer
-stopAtTime time _ =
+stoppedAtTime : TypedTime -> Timer
+stoppedAtTime time =
     PausedTimer time
 
 
@@ -72,7 +72,7 @@ setRunning running timer =
             ActiveTimer timeRemaining
 
         ( ActiveTimer timeRemaining, False ) ->
-            stopAtTime timeRemaining timer
+            stoppedAtTime timeRemaining
 
         _ ->
             timer

@@ -98,7 +98,7 @@ setTimeRemaining : Model -> Model
 setTimeRemaining model =
     case timeToSet model of
         Ok newTime ->
-            { model | timer = model.timer |> Timer.stopAtTime newTime }
+            { model | timer = Timer.stoppedAtTime newTime }
 
         Err unparsableText ->
             model
