@@ -131,7 +131,7 @@ view { timer, timeToSetAsText } =
 viewTimer : Timer -> String -> ParsedTime -> Html Msg
 viewTimer timer timeToSetAsText setTime =
     div []
-        [ div [] [ button [ onClick Tick ] [ text "tick" ] ]
+        [ viewOptionalTickButton True
         , div []
             [ button [ onClick Stop ] [ text "stop" ]
             , button [ onClick Start ] [ text "start" ]
@@ -139,6 +139,15 @@ viewTimer timer timeToSetAsText setTime =
         , viewSetTimerControls timeToSetAsText setTime
         , div [] [ TypedTime.toString TypedTime.Seconds (Timer.timeRemainingInSeconds timer |> toFloat |> TypedTime.seconds) |> text ]
         ]
+
+
+viewOptionalTickButton : Bool -> Html Msg
+viewOptionalTickButton drawIt =
+    if drawIt then
+        div [] [ button [ onClick Tick ] [ text "tick" ] ]
+
+    else
+        div [] []
 
 
 viewSetTimerControls : String -> ParsedTime -> Html Msg
