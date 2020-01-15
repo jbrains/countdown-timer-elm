@@ -131,7 +131,7 @@ view { timer, timeToSetAsText } =
 viewTimer : Timer -> String -> ParsedTime -> Html Msg
 viewTimer timer timeToSetAsText setTime =
     div []
-        [ viewOptionalTickButton True
+        [ viewOptionalTickButton True -- REFACTOR Move True up to the entry point.
         , div []
             [ button [ onClick Stop ] [ text "stop" ]
             , button [ onClick Start ] [ text "start" ]
