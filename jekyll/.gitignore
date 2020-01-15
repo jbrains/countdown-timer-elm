@@ -1,0 +1,8 @@
+# Jekyll build output
+www
+
+# Jekyll caches
+.sass-cache
+.jekyll-cache
+.jekyll-metadata
+vendor
