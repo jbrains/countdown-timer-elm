@@ -1,3 +1,6 @@
+---
+# I just want to use some Liquid.
+---
 <!doctype html>
 
 <html lang="en">
@@ -7,7 +10,7 @@
     <title>Countdown Timer</title>
     <meta name="description" content="Countdown Timer">
     <meta name="author" content="J. B. Rainsberger">
-
+    
     <!-- No stylesheets yet.
     <link rel="stylesheet" href="css/styles.css?v=1.0">
     -->
@@ -20,8 +23,8 @@
     <div style="text-align: center; font-size: 80%">
         <p>Sounds recorded by JimBob and Mike Koenig. Downloaded from <a href="http://soundbible.com">Soundbible</a>.</p>
     </div>
-
-    <script src="target/countdown-timer-elm.js"></script>
+    
+    <script src="{{ site.url }}/javascripts/countdown-timer-elm.js"></script>
     <script>
       const app = Elm.Main.init({
         node: document.getElementById("countdown-timer")
