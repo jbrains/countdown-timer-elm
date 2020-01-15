@@ -112,7 +112,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     case model.timer of
         ActiveTimer _ ->
-            Time.every 1000 (always Tick)
+            Time.every 1000 (\ignored -> Tick)
 
         _ ->
             Sub.none
