@@ -11,14 +11,14 @@
     <meta name="description" content="Countdown Timer">
     <meta name="author" content="J. B. Rainsberger">
     
-    <!-- No stylesheets yet.
-    <link rel="stylesheet" href="css/styles.css?v=1.0">
-    -->
+    <link rel="stylesheet" href="{{ site.url }}/css/screen-styles.css">
 </head>
 
 <body>
-    <div id="countdown-timer">
-    </div>
+    <section class="countdown-timer">
+        <div id="countdown-timer-elm-app">
+        </div>
+    </section>
 
     <div style="text-align: center; font-size: 80%">
         <p>Sounds recorded by JimBob and Mike Koenig. Downloaded from <a href="http://soundbible.com">Soundbible</a>.</p>
@@ -27,7 +27,7 @@
     <script src="{{ site.url }}/javascripts/countdown-timer-elm.js"></script>
     <script>
       const app = Elm.Main.init({
-        node: document.getElementById("countdown-timer")
+        node: document.getElementById("countdown-timer-elm-app")
       });
     </script>
 </body>
