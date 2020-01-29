@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Browser
 import Html exposing (Html, button, div, input, label, text)
@@ -9,6 +9,9 @@ import Task
 import Time
 import Timer exposing (Timer(..))
 import TypedTime exposing (TypedTime, minutes)
+
+
+port ping : () -> Cmd unusedType
 
 
 main =
