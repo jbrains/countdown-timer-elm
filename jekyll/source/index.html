@@ -29,6 +29,10 @@
       const app = Elm.Main.init({
         node: document.getElementById("countdown-timer-elm-app")
       });
+
+      app.ports.ping.subscribe(function() {
+        console.log("PING");
+      });
     </script>
 </body>
 </html>

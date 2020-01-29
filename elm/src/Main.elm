@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (..)
 
 import Browser
 import Html exposing (Html, button, div, input, label, text)
@@ -9,6 +9,9 @@ import Task
 import Time
 import Timer exposing (Timer(..))
 import TypedTime exposing (TypedTime, minutes)
+
+
+port ping : () -> Cmd unusedType
 
 
 main =
@@ -68,7 +71,16 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Tick ->
-            ( tickTimer model, Cmd.none )
+            let
+                newModel =
+                    tickTimer model
+            in
+            case newModel.timer of
+                ExpiredTimer ->
+                    ( newModel, ping () )
+
+                _ ->
+                    ( newModel, Cmd.none )
 
         UpdateSetTimeText newSetTimeText ->
             ( model |> updateSetTimeRemainingText newSetTimeText, Cmd.none )
