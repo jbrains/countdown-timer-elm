@@ -6,3 +6,6 @@ www
 .jekyll-cache
 .jekyll-metadata
 vendor
+
+# Elm build output
+source/javascripts/countdown-timer-elm.js
