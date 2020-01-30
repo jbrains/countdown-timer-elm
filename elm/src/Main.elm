@@ -7,7 +7,7 @@ import Html.Events exposing (onClick, onInput)
 import Result.Extra
 import Task
 import Time
-import Timer exposing (Timer(..))
+import Timer exposing (Timer(..), TimerEvent(..))
 import TypedTime exposing (TypedTime, minutes)
 
 
@@ -75,21 +75,20 @@ update msg model =
     case msg of
         Tick ->
             let
-                newModel =
-                    tickTimer model
+                tickResult =
+                    Timer.tick model.timer
             in
-            case newModel.timer of
-                ExpiredTimer ->
-                    ( newModel, expired () )
+            case tickResult of
+                ( timer, Expired ) ->
+                    ( { model | timer = timer }, expired () )
 
-                _ ->
-                    ( newModel
-                    , if Timer.timeRemainingInSeconds newModel.timer <= 10 then
-                        warning ()
-
-                      else
-                        Cmd.none
+                ( timer, Warning ) ->
+                    ( { model | timer = timer }
+                    , warning ()
                     )
+
+                ( timer, Timer.Nothing ) ->
+                    ( { model | timer = timer }, Cmd.none )
 
         UpdateSetTimeText newSetTimeText ->
             ( model |> updateSetTimeRemainingText newSetTimeText, Cmd.none )
@@ -102,11 +101,6 @@ update msg model =
 
         Stop ->
             ( model |> setTimerRunning False, Cmd.none )
-
-
-tickTimer : Model -> Model
-tickTimer model =
-    { model | timer = Timer.tick model.timer }
 
 
 updateSetTimeRemainingText : String -> Model -> Model

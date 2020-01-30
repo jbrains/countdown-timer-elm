@@ -1,5 +1,6 @@
 module Timer exposing
     ( Timer(..)
+    , TimerEvent(..)
     , expiredTimer
     , setRunning
     , stoppedAtTime
@@ -16,25 +17,34 @@ type Timer
     | ExpiredTimer
 
 
+type TimerEvent
+    = Warning
+    | Expired
+    | Nothing
+
+
 expiredTimer : Timer
 expiredTimer =
     ExpiredTimer
 
 
-tickTimer : (TypedTime -> Timer) -> TypedTime -> Timer
+tickTimer : (TypedTime -> Timer) -> TypedTime -> ( Timer, TimerEvent )
 tickTimer timerConstructor timeRemaining =
     let
         newTimeRemaining =
             TypedTime.sub timeRemaining (seconds 1)
     in
-    if TypedTime.gt newTimeRemaining (seconds 0) then
-        timerConstructor newTimeRemaining
+    if TypedTime.gt newTimeRemaining (seconds 10) then
+        ( timerConstructor newTimeRemaining, Nothing )
+
+    else if TypedTime.gt newTimeRemaining (seconds 0) then
+        ( timerConstructor newTimeRemaining, Warning )
 
     else
-        ExpiredTimer
+        ( ExpiredTimer, Expired )
 
 
-tick : Timer -> Timer
+tick : Timer -> ( Timer, TimerEvent )
 tick timer =
     case timer of
         ActiveTimer timeRemaining ->
@@ -44,7 +54,7 @@ tick timer =
             tickTimer PausedTimer timeRemaining
 
         _ ->
-            timer
+            ( timer, Nothing )
 
 
 timeRemainingInSeconds : Timer -> Int
