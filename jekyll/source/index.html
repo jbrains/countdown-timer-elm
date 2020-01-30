@@ -30,8 +30,8 @@
         node: document.getElementById("countdown-timer-elm-app")
       });
 
-      app.ports.ping.subscribe(function() {
-        console.log("PING");
+      app.ports.expired.subscribe(function() {
+        document.querySelector("#sounds #expired").play();
       });
     </script>
 </body>

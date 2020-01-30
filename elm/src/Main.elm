@@ -1,8 +1,8 @@
 port module Main exposing (..)
 
 import Browser
-import Html exposing (Html, button, div, input, label, text)
-import Html.Attributes exposing (id, placeholder, value)
+import Html exposing (Html, audio, button, div, input, label, text)
+import Html.Attributes exposing (controls, id, placeholder, src, value)
 import Html.Events exposing (onClick, onInput)
 import Result.Extra
 import Task
@@ -11,7 +11,7 @@ import Timer exposing (Timer(..))
 import TypedTime exposing (TypedTime, minutes)
 
 
-port ping : () -> Cmd unusedType
+port expired : () -> Cmd unusedType
 
 
 main =
@@ -77,7 +77,7 @@ update msg model =
             in
             case newModel.timer of
                 ExpiredTimer ->
-                    ( newModel, ping () )
+                    ( newModel, expired () )
 
                 _ ->
                     ( newModel, Cmd.none )
@@ -186,4 +186,11 @@ viewSetTimerControls timeToSetAsText setTime =
 
 viewSounds : Html Msg
 viewSounds =
-    div [ id "sounds" ] []
+    div [ id "sounds" ]
+        [ audio
+            [ id "expired"
+            , src "/audio/timer-expired.mp3"
+            , controls False
+            ]
+            []
+        ]
