@@ -26,6 +26,7 @@
     
     <script src="{{ site.url }}/javascripts/countdown-timer-elm.js"></script>
     <script>
+      // SIDE-EFFECT: creates the application HTML node at this location
       const app = Elm.Main.init({
         node: document.getElementById("countdown-timer-elm-app")
       });
