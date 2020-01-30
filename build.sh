@@ -2,6 +2,6 @@
 
 # Build Elm code
 pushd elm
-elm make src/Main.elm --output=target/countdown-timer-elm.js
+elm make src/Main.elm --output=../jekyll/source/javascripts/countdown-timer-elm.js
 popd
 
