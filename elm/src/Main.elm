@@ -2,7 +2,7 @@ port module Main exposing (..)
 
 import Browser
 import Html exposing (Html, button, div, input, label, text)
-import Html.Attributes exposing (placeholder, value)
+import Html.Attributes exposing (id, placeholder, value)
 import Html.Events exposing (onClick, onInput)
 import Result.Extra
 import Task
@@ -137,7 +137,9 @@ view { timer, timeToSetAsText } =
             parseTime timeToSetAsText
     in
     div []
-        [ viewTimer timer timeToSetAsText setTime ]
+        [ viewTimer timer timeToSetAsText setTime
+        , viewSounds
+        ]
 
 
 viewTimer : Timer -> String -> ParsedTime -> Html Msg
@@ -180,3 +182,8 @@ viewSetTimerControls timeToSetAsText setTime =
         , label [] [ text (formatTypedTimeResult setTime) ]
         , button [ onClick SetRemainingTime ] [ text "set" ]
         ]
+
+
+viewSounds : Html Msg
+viewSounds =
+    div [ id "sounds" ] []
