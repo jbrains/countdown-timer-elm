@@ -18,6 +18,4 @@ me something. Send me articles to read. Thank you!
 
 ## Inbox
 
-- Warning events at 10 seconds, which play a jaunty sound.
-- Expired event, which plays a different jaunty sound.
 - Significantly less ugliness.
