@@ -31,8 +31,15 @@
         node: document.getElementById("countdown-timer-elm-app")
       });
 
+      // NOW the HTML elements that Elm generates are available to use
       app.ports.expired.subscribe(function() {
         document.querySelector("#sounds #expired").play();
+      });
+
+      app.ports.warning.subscribe(function() {
+        const warningSoundNode = document.querySelector("#sounds #warning");
+        // Clone the node in order to be able to play it without waiting for the previous iteration to finish playing.
+        warningSoundNode.cloneNode(true).play();
       });
     </script>
 </body>

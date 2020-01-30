@@ -14,6 +14,9 @@ import TypedTime exposing (TypedTime, minutes)
 port expired : () -> Cmd unusedType
 
 
+port warning : () -> Cmd unusedType
+
+
 main =
     Browser.element { init = init, update = update, view = view, subscriptions = subscriptions }
 
@@ -80,7 +83,13 @@ update msg model =
                     ( newModel, expired () )
 
                 _ ->
-                    ( newModel, Cmd.none )
+                    ( newModel
+                    , if Timer.timeRemainingInSeconds newModel.timer <= 10 then
+                        warning ()
+
+                      else
+                        Cmd.none
+                    )
 
         UpdateSetTimeText newSetTimeText ->
             ( model |> updateSetTimeRemainingText newSetTimeText, Cmd.none )
@@ -187,10 +196,16 @@ viewSetTimerControls timeToSetAsText setTime =
 viewSounds : Html Msg
 viewSounds =
     div [ id "sounds" ]
-        [ audio
-            [ id "expired"
-            , src "/audio/timer-expired.mp3"
-            , controls False
-            ]
-            []
+        [ viewAudioWithoutControls "expired" "/audio/timer-expired.mp3"
+        , viewAudioWithoutControls "warning" "/audio/timer-warning.mp3"
         ]
+
+
+viewAudioWithoutControls : String -> String -> Html Msg
+viewAudioWithoutControls elementId elementSrcUrl =
+    audio
+        [ id elementId
+        , src elementSrcUrl
+        , controls False
+        ]
+        []
