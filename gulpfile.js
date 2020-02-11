@@ -14,8 +14,7 @@ const runServer = function() {
 }
 
 const watchElmCode = function() {
-  watch("src/**/*.elm", series(buildElmCode));
-  return Promise.resolve({succeeded: true});
+  return watch("src/**/*.elm", series(buildElmCode));
 }
 
 const buildElmCode = function() {
