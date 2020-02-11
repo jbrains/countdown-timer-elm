@@ -18,8 +18,8 @@ const watchElmCode = function() {
 
 const buildElmCode = function() {
   return src("src/Main.elm")
-     .pipe(elm.bundle("countdown-timer-elm.js", { optimize: true, cwd: "." }))
-     .pipe(dest("www/javascripts"));
+   .pipe(elm.bundle("countdown-timer-elm.js", { optimize: true, cwd: "." }))
+   .pipe(dest("www/javascripts"));
 }
 
 exports.build = buildElmCode;
