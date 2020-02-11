@@ -18,23 +18,23 @@ me something. Send me articles to read. Thank you!
 
 ## Build and Run
 
-I use Jekyll to get a simple application running with an embedded web server. Do these things once:
+I use [gulp](https://gulpjs.com) to build the Elm application and run it with an embedded web server. Do these things once:
 
-1. Install `ruby` 2.6.2. (See `jekyll/.ruby-version`)
-2. `pushd jekyll && gem install bundler && popd`
-3. `chmod u+x build.sh`
+These instructions seem accurate for Node 6.x and Gulp 4.x. Please update this statement if you know that these instructions work for more versions of these packages.
+
+1. [Install Node.js](https://nodejs.org/en/).
+1. Use Node to install gulp: `$ npm install --global gulp-cli`.
 
 To run the web server:
 
-1. `cd jekyll && bundle install && bundle exec jekyll serve --port=4001`
-2. Visit <https://localhost:4001>, the "timer page".
+1. Run gulp, which by default starts the web server, builds the Elm code, then watches the Elm code files to rebuild the files whenever they change. `$ gulp`
 
-The HTTP port number is a free choice; I use 4001 here only as an example.
+Visit <https://localhost:4001> to see the running application.
 
+To run the tests:
+
+1. `$ elm-test`.
 To build the Elm code:
-
-1. `./build.sh`
-2. Monitor the `jekyll serve` window to see that the JavaScript code has been reloaded, then refresh the browser window where you loaded the timer page.
 
 ## Inbox
 
