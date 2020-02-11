@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/jbrains/countdown-timer-elm/issues"
   },
-  "homepage": "https://github.com/jbrains/countdown-timer-elm#readme"
+  "homepage": "https://github.com/jbrains/countdown-timer-elm#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2"
+  }
 }
