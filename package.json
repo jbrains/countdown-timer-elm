@@ -1,0 +1,19 @@
+{
+  "name": "training-countdown-timer-elm",
+  "version": "1.0.0",
+  "description": "A countdown timer to use in training classes.",
+  "main": "index.html",
+  "scripts": {
+    "test": "elm-test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jbrains/countdown-timer-elm.git"
+  },
+  "author": "J. B. Rainsberger",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jbrains/countdown-timer-elm/issues"
+  },
+  "homepage": "https://github.com/jbrains/countdown-timer-elm#readme"
+}
