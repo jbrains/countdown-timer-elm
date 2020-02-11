@@ -29,7 +29,7 @@ To run the web server:
 
 1. Run gulp, which by default starts the web server, builds the Elm code, then watches the Elm code files to rebuild the files whenever they change. `$ gulp`
 
-Visit <https://localhost:4001> to see the running application.
+Visit <https://localhost:4001> to see the running application. If you need to change the port, then do that in the `gulpfile`.
 
 To run the tests:
 
