@@ -1,4 +1,4 @@
-const { series, watch, src, dest } = require("gulp");
+const { series, parallel, watch, src, dest } = require("gulp");
 const elm = require("gulp-elm");
 const del = require("del");
 const gulpServerIo = require('gulp-server-io');
@@ -35,4 +35,4 @@ const buildElmCode = async function() {
 exports.build = buildElmCode;
 exports.clean = clean;
 exports.runServer = runServer;
-exports.default = series(clean, runServer, buildElmCode);
+exports.default = series(clean, buildElmCode, parallel(watchElmCode, runServer));
