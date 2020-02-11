@@ -15,7 +15,7 @@ const runServer = async function() {
 
 const watchElmCode = async function() {
   console.log("Watch the Elm code, to rebuild it as it changes.");
-  // watch("elm/src/**/*.elm", series(buildElmCode));
+  watch("elm/src/**/*.elm", series(buildElmCode));
   await Promise.resolve({succeeded: true});
 }
 
@@ -29,4 +29,4 @@ const buildElmCode = async function() {
 
 exports.build = buildElmCode;
 exports.clean = clean;
-exports.default = series(clean, runServer, watchElmCode, buildElmCode);
+exports.default = series(clean, runServer, buildElmCode);
