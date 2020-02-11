@@ -6706,46 +6706,11 @@ var $author$project$Main$viewSounds = A2(
 			A2($author$project$Main$viewAudioWithoutControls, 'expired', '/audio/timer-expired.mp3'),
 			A2($author$project$Main$viewAudioWithoutControls, 'warning', '/audio/timer-warning.mp3')
 		]));
-var $author$project$Main$Start = {$: 1};
-var $author$project$Main$Stop = {$: 2};
+var $author$project$Main$SetRemainingTime = {$: 4};
+var $author$project$Main$UpdateSetTimeText = function (a) {
+	return {$: 3, a: a};
+};
 var $elm$html$Html$button = _VirtualDom_node('button');
-var $elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 0, a: a};
-};
-var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var $elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			$elm$virtual_dom$VirtualDom$on,
-			event,
-			$elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var $elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		$elm$html$Html$Events$on,
-		'click',
-		$elm$json$Json$Decode$succeed(msg));
-};
-var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
-var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $jxxcarlson$elm_typed_time$TypedTime$toSeconds = function (_v0) {
-	var t = _v0.b;
-	return t / 1000.0;
-};
-var $author$project$Timer$timeRemainingInSeconds = function (timer) {
-	switch (timer.$) {
-		case 1:
-			var timeRemaining = timer.a;
-			return $elm$core$Basics$floor(
-				$jxxcarlson$elm_typed_time$TypedTime$toSeconds(timeRemaining));
-		case 0:
-			var timeRemaining = timer.a;
-			return $elm$core$Basics$floor(
-				$jxxcarlson$elm_typed_time$TypedTime$toSeconds(timeRemaining));
-		default:
-			return 0;
-	}
-};
 var $elm$core$Basics$round = _Basics_round;
 var $jxxcarlson$elm_typed_time$TypedTime$hmRecordFromSeconds = function (s) {
 	var m1 = $elm$core$Basics$round(s / 60);
@@ -6831,28 +6796,6 @@ var $jxxcarlson$elm_typed_time$TypedTime$toString = F2(
 				return $jxxcarlson$elm_typed_time$TypedTime$hmStringFromSeconds(value / 1000);
 		}
 	});
-var $author$project$Main$viewOptionalTickButton = function (drawIt) {
-	return drawIt ? A2(
-		$elm$html$Html$div,
-		_List_Nil,
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Events$onClick($author$project$Main$Tick)
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('tick')
-					]))
-			])) : A2($elm$html$Html$div, _List_Nil, _List_Nil);
-};
-var $author$project$Main$SetRemainingTime = {$: 4};
-var $author$project$Main$UpdateSetTimeText = function (a) {
-	return {$: 3, a: a};
-};
 var $author$project$Main$formatTypedTimeResult = function (result) {
 	if (!result.$) {
 		var typedTime = result.a;
@@ -6864,6 +6807,23 @@ var $author$project$Main$formatTypedTimeResult = function (result) {
 };
 var $elm$html$Html$input = _VirtualDom_node('input');
 var $elm$html$Html$label = _VirtualDom_node('label');
+var $elm$virtual_dom$VirtualDom$Normal = function (a) {
+	return {$: 0, a: a};
+};
+var $elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
+var $elm$html$Html$Events$on = F2(
+	function (event, decoder) {
+		return A2(
+			$elm$virtual_dom$VirtualDom$on,
+			event,
+			$elm$virtual_dom$VirtualDom$Normal(decoder));
+	});
+var $elm$html$Html$Events$onClick = function (msg) {
+	return A2(
+		$elm$html$Html$Events$on,
+		'click',
+		$elm$json$Json$Decode$succeed(msg));
+};
 var $elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
@@ -6900,6 +6860,8 @@ var $elm$html$Html$Events$onInput = function (tagger) {
 var $elm$html$Html$Attributes$placeholder = $elm$html$Html$Attributes$stringProperty('placeholder');
 var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
+var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
+var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
 var $elm_community$result_extra$Result$Extra$unpack = F3(
 	function (errFunc, okFunc, result) {
 		if (!result.$) {
@@ -6955,6 +6917,85 @@ var $author$project$Main$viewSetTimerControls = F2(
 						]))
 				]));
 	});
+var $jxxcarlson$elm_typed_time$TypedTime$toSeconds = function (_v0) {
+	var t = _v0.b;
+	return t / 1000.0;
+};
+var $author$project$Timer$timeRemainingInSeconds = function (timer) {
+	switch (timer.$) {
+		case 1:
+			var timeRemaining = timer.a;
+			return $elm$core$Basics$floor(
+				$jxxcarlson$elm_typed_time$TypedTime$toSeconds(timeRemaining));
+		case 0:
+			var timeRemaining = timer.a;
+			return $elm$core$Basics$floor(
+				$jxxcarlson$elm_typed_time$TypedTime$toSeconds(timeRemaining));
+		default:
+			return 0;
+	}
+};
+var $author$project$Main$viewTimeRemaining = function (timer) {
+	return A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				$elm$html$Html$text(
+				A2(
+					$jxxcarlson$elm_typed_time$TypedTime$toString,
+					1,
+					$jxxcarlson$elm_typed_time$TypedTime$seconds(
+						$author$project$Timer$timeRemainingInSeconds(timer))))
+			]));
+};
+var $author$project$Main$Start = {$: 1};
+var $author$project$Main$Stop = {$: 2};
+var $author$project$Main$viewOptionalTickButton = function (drawIt) {
+	return drawIt ? A2(
+		$elm$html$Html$div,
+		_List_Nil,
+		_List_fromArray(
+			[
+				A2(
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Events$onClick($author$project$Main$Tick)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('tick')
+					]))
+			])) : A2($elm$html$Html$div, _List_Nil, _List_Nil);
+};
+var $author$project$Main$viewTimerControls = A2(
+	$elm$html$Html$div,
+	_List_Nil,
+	_List_fromArray(
+		[
+			A2(
+			$elm$html$Html$button,
+			_List_fromArray(
+				[
+					$elm$html$Html$Events$onClick($author$project$Main$Stop)
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('stop')
+				])),
+			A2(
+			$elm$html$Html$button,
+			_List_fromArray(
+				[
+					$elm$html$Html$Events$onClick($author$project$Main$Start)
+				]),
+			_List_fromArray(
+				[
+					$elm$html$Html$text('start')
+				])),
+			$author$project$Main$viewOptionalTickButton(false)
+		]));
 var $author$project$Main$viewTimer = F3(
 	function (timer, timeToSetAsText, setTime) {
 		return A2(
@@ -6962,46 +7003,9 @@ var $author$project$Main$viewTimer = F3(
 			_List_Nil,
 			_List_fromArray(
 				[
-					$author$project$Main$viewOptionalTickButton(false),
-					A2(
-					$elm$html$Html$div,
-					_List_Nil,
-					_List_fromArray(
-						[
-							A2(
-							$elm$html$Html$button,
-							_List_fromArray(
-								[
-									$elm$html$Html$Events$onClick($author$project$Main$Stop)
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('stop')
-								])),
-							A2(
-							$elm$html$Html$button,
-							_List_fromArray(
-								[
-									$elm$html$Html$Events$onClick($author$project$Main$Start)
-								]),
-							_List_fromArray(
-								[
-									$elm$html$Html$text('start')
-								]))
-						])),
-					A2($author$project$Main$viewSetTimerControls, timeToSetAsText, setTime),
-					A2(
-					$elm$html$Html$div,
-					_List_Nil,
-					_List_fromArray(
-						[
-							$elm$html$Html$text(
-							A2(
-								$jxxcarlson$elm_typed_time$TypedTime$toString,
-								1,
-								$jxxcarlson$elm_typed_time$TypedTime$seconds(
-									$author$project$Timer$timeRemainingInSeconds(timer))))
-						]))
+					$author$project$Main$viewTimeRemaining(timer),
+					$author$project$Main$viewTimerControls,
+					A2($author$project$Main$viewSetTimerControls, timeToSetAsText, setTime)
 				]));
 	});
 var $author$project$Main$view = function (_v0) {
