@@ -36,7 +36,8 @@
       app.ports.warning.subscribe(function() {
         const warningSoundNode = document.querySelector("#sounds #warning");
         // Clone the node in order to be able to play it without waiting for the previous iteration to finish playing.
-        warningSoundNode.cloneNode(true).play();
+        // No need to clone the entire node tree; just the <audio> tag suffices, therefore "false".
+        warningSoundNode.cloneNode(false).play();
       });
     </script>
 </body>
