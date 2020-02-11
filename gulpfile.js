@@ -4,15 +4,13 @@ const del = require("del");
 const gulpServerIo = require('gulp-server-io');
 
 const clean = function() {
-  del.sync(["elm/target", "jekyll/source/javascripts/countdown-timer-elm.js"]);
+  del.sync(["elm/target", "www/javascripts/countdown-timer-elm.js"]);
   return Promise.resolve({succeeded: true});
 }
 
 const runServer = function() {
-  // Deploy
-  src("jekyll/source").pipe(dest("jekyll/www"));
   // Run server
-  return src(["jekyll/www"]).pipe(gulpServerIo({port: 4001}));
+  return src(["www"]).pipe(gulpServerIo({port: 4001}));
 }
 
 const watchElmCode = function() {
@@ -23,7 +21,7 @@ const watchElmCode = function() {
 const buildElmCode = function() {
   src("elm/src/Main.elm")
      .pipe(elm.bundle("countdown-timer-elm.js", { optimize: true, cwd: "elm" }))
-     .pipe(dest("jekyll/source/javascripts"));
+     .pipe(dest("www/javascripts"));
   return Promise.resolve({succeeded: true});
 }
 

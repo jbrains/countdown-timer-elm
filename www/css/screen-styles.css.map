@@ -1,0 +1,12 @@
+{
+	"version": 3,
+	"file": "screen-styles.css",
+	"sources": [
+		"screen-styles.scss"
+	],
+	"sourcesContent": [
+		".countdown-timer {\n  border: 1px solid;\n  padding: 1em;\n}\n"
+	],
+	"names": [],
+	"mappings": "AAAA,AAAA,gBAAgB,CAAC,EACf,MAAM,EAAE,SAAS,EACjB,OAAO,EAAE,GAAG,GACb"
+}
