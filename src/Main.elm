@@ -163,7 +163,7 @@ viewTimerControls =
     div []
         [ button [ onClick Stop ] [ text "stop" ]
         , button [ onClick Start ] [ text "start" ]
-        , viewOptionalTickButton False -- REFACTOR Move True up to the entry point.
+        , viewOptionalTickButton False -- REFACTOR Move this parameter up to the entry point.
         ]
 
 
