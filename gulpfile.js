@@ -1,6 +1,7 @@
 const { series, watch, src, dest } = require("gulp");
 const elm = require("gulp-elm");
 const del = require("del");
+const gulpServerIo = require('gulp-server-io');
 
 const clean = async function() {
   console.log("Clean: remove generated code.");
@@ -10,6 +11,10 @@ const clean = async function() {
 
 const runServer = async function() {
   console.log("Run the server on port 4001.");
+  // Deploy
+  src("jekyll/source").pipe(dest("jekyll/www"));
+  // Run server
+  src(["jekyll/www"]).pipe(gulpServerIo({port: 4001}));
   await Promise.resolve({succeeded: true});
 }
 
@@ -29,4 +34,5 @@ const buildElmCode = async function() {
 
 exports.build = buildElmCode;
 exports.clean = clean;
+exports.runServer = runServer;
 exports.default = series(clean, runServer, buildElmCode);

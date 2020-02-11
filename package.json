@@ -19,6 +19,7 @@
   "devDependencies": {
     "del": "^5.1.0",
     "gulp": "^4.0.2",
-    "gulp-elm": "^0.8.2"
+    "gulp-elm": "^0.8.2",
+    "gulp-server-io": "^1.5.1"
   }
 }
