@@ -14,13 +14,13 @@ const runServer = function() {
 }
 
 const watchElmCode = function() {
-  watch("elm/src/**/*.elm", series(buildElmCode));
+  watch("src/**/*.elm", series(buildElmCode));
   return Promise.resolve({succeeded: true});
 }
 
 const buildElmCode = function() {
-  src("elm/src/Main.elm")
-     .pipe(elm.bundle("countdown-timer-elm.js", { optimize: true, cwd: "elm" }))
+  src("src/Main.elm")
+     .pipe(elm.bundle("countdown-timer-elm.js", { optimize: true, cwd: "." }))
      .pipe(dest("www/javascripts"));
   return Promise.resolve({succeeded: true});
 }
