@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/jbrains/countdown-timer-elm#readme",
   "devDependencies": {
-    "gulp": "^4.0.2"
+    "del": "^5.1.0",
+    "gulp": "^4.0.2",
+    "gulp-elm": "^0.8.2"
   }
 }
