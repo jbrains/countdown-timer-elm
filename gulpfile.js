@@ -1,6 +1,6 @@
-const defaultTask = function(onTaskSucceeded) {
+const defaultTask = async function() {
   console.log("Hello, world. Gulp is running.");
-  onTaskSucceeded();
+  await Promise.resolve({});
 }
 
 exports.default = defaultTask;
