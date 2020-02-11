@@ -4,8 +4,7 @@ const del = require("del");
 const gulpServerIo = require('gulp-server-io');
 
 const clean = function() {
-  del.sync(["www/javascripts/countdown-timer-elm.js"]);
-  return Promise.resolve({succeeded: true});
+  return del(["www/javascripts/countdown-timer-elm.js"]);
 }
 
 const runServer = function() {
